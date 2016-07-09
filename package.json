@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "description": "syncs a node_modules folder with an ideal npm package tree",
   "main": "dist/index.js",
+  "bin": {
+    "npm-sync": "dist/cli.js"
+  },
   "scripts": {
     "test": "babel-tape-runner test.js && semistandard | snazzy",
     "build": "rm -rf dist && mkdir -p dist && babel lib --out-dir dist",
     "watch": "rm -rf dist && mkdir -p dist && babel -w lib --out-dir dist",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "start": "babel-watch lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +28,18 @@
     "babel-core": "^6.10.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-tape-runner": "^2.0.1",
+    "babel-watch": "^2.0.2",
     "semistandard": "^8.0.0",
     "snazzy": "^4.0.0",
     "tapava": "^2.2.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "co": "^4.6.0",
+    "download-npm-package": "^1.0.1",
+    "get-ideal-package-tree": "^1.0.2",
+    "mkdirp-then": "^1.2.0",
+    "object.entries": "^1.0.3",
+    "read-package-json": "^2.0.4"
   }
 }
