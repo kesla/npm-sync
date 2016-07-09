@@ -39,7 +39,7 @@
     "bluebird": "^3.4.1",
     "co": "^4.6.0",
     "download-npm-package": "^2.0.0",
-    "get-ideal-package-tree": "^1.0.2",
+    "get-ideal-package-tree": "^1.0.3",
     "lodash.sortby": "^4.5.0",
     "mkdirp-then": "^1.2.0",
     "object.entries": "^1.0.3",
