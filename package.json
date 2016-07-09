@@ -7,7 +7,7 @@
     "npm-sync": "dist/cli.js"
   },
   "scripts": {
-    "test": "babel-tape-runner test.js && semistandard | snazzy",
+    "test": "babel-tape-runner test/*-test.js && semistandard | snazzy",
     "build": "rm -rf dist && mkdir -p dist && babel lib --out-dir dist",
     "watch": "rm -rf dist && mkdir -p dist && babel -w lib --out-dir dist",
     "prepublish": "npm run build",
@@ -41,6 +41,7 @@
     "co": "^4.6.0",
     "download-npm-package": "^3.0.0",
     "get-ideal-package-tree": "^1.0.3",
+    "immutable-object-methods": "^1.2.1",
     "object.entries": "^1.0.3",
     "read-package-json": "^2.0.4"
   }
