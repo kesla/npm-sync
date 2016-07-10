@@ -39,7 +39,7 @@
   "dependencies": {
     "bluebird": "^3.4.1",
     "co": "^4.6.0",
-    "download-npm-package": "^3.0.0",
+    "download-npm-package": "^3.1.0",
     "get-ideal-package-tree": "^1.0.3",
     "object.entries": "^1.0.3",
     "read-package-json": "^2.0.4"
