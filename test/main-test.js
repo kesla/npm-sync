@@ -31,7 +31,7 @@ test('simple package.json', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+  const downloadNpmPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -83,7 +83,7 @@ test('simple package.json, production === true', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+  const downloadNpmPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));

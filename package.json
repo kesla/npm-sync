@@ -46,6 +46,7 @@
     "immutable-object-methods": "^1.2.1",
     "mkdirp-then": "^1.2.0",
     "object.entries": "^1.0.3",
-    "read-json": "^1.0.3"
+    "read-json": "^1.0.3",
+    "rimraf-then": "^1.0.0"
   }
 }
