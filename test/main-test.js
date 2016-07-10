@@ -4,6 +4,8 @@ import {dirSync as tmp} from 'tmp';
 import inject from '../lib/inject';
 import Promise from 'bluebird';
 import sortBy from 'lodash.sortby';
+import mkdirp from 'mkdirp-then';
+import {join} from 'path';
 
 test('simple package.json', function * (t) {
   const expectedArgs = [
@@ -29,9 +31,11 @@ test('simple package.json', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => {
+  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+    const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
-    return Promise.resolve(null);
+    yield mkdirp(join(dir, packageName));
+    yield fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
   const {name: dir} = tmp();
@@ -79,9 +83,11 @@ test('simple package.json, production === true', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => {
+  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+    const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
-    return Promise.resolve(null);
+    yield mkdirp(join(dir, packageName));
+    yield fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
   const {name: dir} = tmp();
