@@ -39,9 +39,10 @@
   "dependencies": {
     "bluebird": "^3.4.1",
     "co": "^4.6.0",
-    "download-npm-package": "^3.0.0",
+    "download-npm-package": "^3.1.0",
     "fs-symlink": "^1.2.1",
     "get-ideal-package-tree": "^1.0.3",
+    "get-package-json-from-registry": "^1.0.3",
     "immutable-object-methods": "^1.2.1",
     "mkdirp-then": "^1.2.0",
     "object.entries": "^1.0.3",
