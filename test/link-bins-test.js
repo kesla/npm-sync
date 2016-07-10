@@ -45,3 +45,24 @@ test('linkBins()', function * (t) {
     t.is(err.code, 'ENOENT', 'no bin for beep');
   }
 });
+
+test('linkBins(), bin === String', function * (t) {
+  const {name: _dir} = tmp();
+  const dir = yield fs.realpath(_dir);
+  yield mkdirp(`${dir}/package/bin`);
+
+  yield fs.writeFile(`${dir}/package/package.json`, JSON.stringify({
+    bin: 'bin/foo.js',
+    name: 'package'
+  }));
+  yield fs.writeFile(`${dir}/package/bin/foo.js`, '');
+  yield linkBins({
+    packageNames: ['package'],
+    dir
+  });
+  const fooStat = yield fs.lstat(`${dir}/.bin/package`);
+
+  t.true(fooStat.isSymbolicLink());
+
+  t.is(yield fs.realpath(`${dir}/.bin/package`), `${dir}/package/bin/foo.js`);
+});
