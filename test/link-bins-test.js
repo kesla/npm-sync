@@ -1,8 +1,9 @@
 import test from 'tapava';
-import linkBins from '../lib/link-bins';
 import fs from 'then-fs';
 import {dirSync as tmp} from 'tmp';
 import mkdirp from 'mkdirp-then';
+
+import linkBins from '../lib/link-bins';
 
 test('linkBins()', function * (t) {
   const {name: _dir} = tmp();

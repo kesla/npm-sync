@@ -1,10 +1,12 @@
+import {join} from 'path';
+
 import test from 'tapava';
 import fs from 'then-fs';
 import {dirSync as tmp} from 'tmp';
-import setupDirToIdealTree from '../lib/dir-to-ideal-tree';
 import sortBy from 'lodash.sortby';
 import mkdirp from 'mkdirp-then';
-import {join} from 'path';
+
+import setupDirToIdealTree from '../lib/dir-to-ideal-tree';
 
 test('dirToIdealTree() already existing packages, one good & one needs updating', function * (t) {
   const idealTree = {
@@ -57,7 +59,7 @@ test('dirToIdealTree() with package that should be removed', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+  const downloadNpmPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -101,7 +103,7 @@ test('dirToIdealTree() with nested package that should be removed', function * (
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+  const downloadNpmPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -142,7 +144,7 @@ test('dirToIdealTree() with multiple nested package where one should be removed'
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * (t) {
+  const downloadNpmPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));

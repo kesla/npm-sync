@@ -1,11 +1,13 @@
+import {join} from 'path';
+
 import test from 'tapava';
 import fs from 'then-fs';
 import {dirSync as tmp} from 'tmp';
-import inject from '../lib/inject';
 import Promise from 'bluebird';
 import sortBy from 'lodash.sortby';
 import mkdirp from 'mkdirp-then';
-import {join} from 'path';
+
+import inject from '../lib/inject';
 
 test('simple package.json', function * (t) {
   const expectedArgs = [
