@@ -3,7 +3,6 @@ import {join} from 'path';
 import test from 'tapava';
 import fs from 'then-fs';
 import {dirSync as tmp} from 'tmp';
-import Promise from 'bluebird';
 import sortBy from 'lodash.sortby';
 import mkdirp from 'mkdirp-then';
 
