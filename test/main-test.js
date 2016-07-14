@@ -32,7 +32,7 @@ test('simple package.json', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * () {
+  const downloadPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -49,7 +49,7 @@ test('simple package.json', function * (t) {
     }
   }));
 
-  yield inject({getIdealPackageTree, downloadNpmPackage})({dir});
+  yield inject({getIdealPackageTree, downloadPackage})({dir});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.2.3', dir: `${dir}/node_modules`},
@@ -84,7 +84,7 @@ test('simple package.json, production === true', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * () {
+  const downloadPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -102,7 +102,7 @@ test('simple package.json, production === true', function * (t) {
     }
   }));
 
-  yield inject({getIdealPackageTree, downloadNpmPackage})({dir, production: true});
+  yield inject({getIdealPackageTree, downloadPackage})({dir, production: true});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.2.3', dir: `${dir}/node_modules`},

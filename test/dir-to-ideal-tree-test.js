@@ -22,7 +22,7 @@ test('dirToIdealTree() already existing packages, one good & one needs updating'
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * () {
+  const downloadPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -42,7 +42,7 @@ test('dirToIdealTree() already existing packages, one good & one needs updating'
     version: '3.0.0'
   }));
 
-  yield setupDirToIdealTree(downloadNpmPackage)({dir, tree: idealTree});
+  yield setupDirToIdealTree(downloadPackage)({dir, tree: idealTree});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'c@2.0.0', dir: `${dir}/node_modules`},
@@ -59,7 +59,7 @@ test('dirToIdealTree() with package that should be removed', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * () {
+  const downloadPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -84,7 +84,7 @@ test('dirToIdealTree() with package that should be removed', function * (t) {
     version: '3.0.0'
   }));
 
-  yield setupDirToIdealTree(downloadNpmPackage)({dir, tree: idealTree});
+  yield setupDirToIdealTree(downloadPackage)({dir, tree: idealTree});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.0.0', dir: `${dir}/node_modules`}
@@ -103,7 +103,7 @@ test('dirToIdealTree() with nested package that should be removed', function * (
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * () {
+  const downloadPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -123,7 +123,7 @@ test('dirToIdealTree() with nested package that should be removed', function * (
     version: '3.0.0'
   }));
 
-  yield setupDirToIdealTree(downloadNpmPackage)({dir, tree: idealTree});
+  yield setupDirToIdealTree(downloadPackage)({dir, tree: idealTree});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.0.0', dir: `${dir}/node_modules`}
@@ -144,7 +144,7 @@ test('dirToIdealTree() with multiple nested package where one should be removed'
   };
 
   const _actualDownloadArguments = [];
-  const downloadNpmPackage = ({arg, dir}) => function * () {
+  const downloadPackage = ({arg, dir}) => function * () {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
     yield mkdirp(join(dir, packageName));
@@ -171,7 +171,7 @@ test('dirToIdealTree() with multiple nested package where one should be removed'
     version: '3.0.0'
   }));
 
-  yield setupDirToIdealTree(downloadNpmPackage)({dir, tree: idealTree});
+  yield setupDirToIdealTree(downloadPackage)({dir, tree: idealTree});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.0.0', dir: `${dir}/node_modules`}
