@@ -47,7 +47,7 @@
     "mkdirp-then": "^1.2.0",
     "object.entries": "^1.0.3",
     "rimraf-then": "^1.0.0",
-    "then-read-json": "^1.0.1"
+    "then-read-json": "github:kesla/then-read-json"
   },
   "xo": {
     "esnext": true,
