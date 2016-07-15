@@ -26,6 +26,8 @@
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
+    "babel-plugin-syntax-async-functions": "6.8.0",
+    "babel-plugin-transform-async-to-generator": "6.8.0",
     "babel-preset-es2015-node4": "^2.1.0",
     "babel-tape-runner": "^2.0.1",
     "babel-watch": "^2.0.2",
@@ -36,7 +38,6 @@
     "xo": "^0.16.0"
   },
   "dependencies": {
-    "co": "^4.6.0",
     "download-github-package": "^1.0.0",
     "download-npm-package": "^3.1.0",
     "fs-symlink": "^1.2.1",
