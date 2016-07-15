@@ -8,7 +8,7 @@ import mkdirp from 'mkdirp-then';
 
 import inject from '../lib/inject';
 
-test('simple package.json', function * (t) {
+test('simple package.json', async t => {
   const expectedArgs = [
     'a@^1.0.0', 'b@~2.5.1'
   ];
@@ -32,15 +32,15 @@ test('simple package.json', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadPackage = ({arg, dir}) => function * () {
+  const downloadPackage = async ({arg, dir}) => {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
-    yield mkdirp(join(dir, packageName));
-    yield fs.writeFile(join(dir, packageName, 'package.json'), '{}');
+    await mkdirp(join(dir, packageName));
+    await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
   const {name: dir} = tmp();
-  yield fs.writeFile(`${dir}/package.json`, JSON.stringify({
+  await fs.writeFile(`${dir}/package.json`, JSON.stringify({
     dependencies: {
       a: '^1.0.0'
     },
@@ -49,7 +49,7 @@ test('simple package.json', function * (t) {
     }
   }));
 
-  yield inject({getIdealPackageTree, downloadPackage})({dir});
+  await inject({getIdealPackageTree, downloadPackage})({dir});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.2.3', dir: `${dir}/node_modules`},
@@ -60,7 +60,7 @@ test('simple package.json', function * (t) {
   t.deepEqual(actualDownloadArguments, expectedDownloadArguments);
 });
 
-test('simple package.json, production === true', function * (t) {
+test('simple package.json, production === true', async t => {
   const expectedArgs = [
     'a@^1.0.0', 'b@~2.5.1'
   ];
@@ -84,15 +84,15 @@ test('simple package.json, production === true', function * (t) {
   };
 
   const _actualDownloadArguments = [];
-  const downloadPackage = ({arg, dir}) => function * () {
+  const downloadPackage = async ({arg, dir}) => {
     const [packageName] = arg.split('@');
     _actualDownloadArguments.push({arg, dir});
-    yield mkdirp(join(dir, packageName));
-    yield fs.writeFile(join(dir, packageName, 'package.json'), '{}');
+    await mkdirp(join(dir, packageName));
+    await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
   const {name: dir} = tmp();
-  yield fs.writeFile(`${dir}/package.json`, JSON.stringify({
+  await fs.writeFile(`${dir}/package.json`, JSON.stringify({
     dependencies: {
       a: '^1.0.0',
       b: '~2.5.1'
@@ -102,7 +102,7 @@ test('simple package.json, production === true', function * (t) {
     }
   }));
 
-  yield inject({getIdealPackageTree, downloadPackage})({dir, production: true});
+  await inject({getIdealPackageTree, downloadPackage})({dir, production: true});
   const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
   const expectedDownloadArguments = [
     {arg: 'a@1.2.3', dir: `${dir}/node_modules`},
