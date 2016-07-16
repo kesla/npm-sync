@@ -2,7 +2,7 @@ import {join} from 'path';
 
 import test from 'tapava';
 import fs from 'then-fs';
-import {dirSync as tmp} from 'tmp';
+import tmp from 'then-tmp';
 import sortBy from 'lodash.sortby';
 import mkdirp from 'mkdirp-then';
 
@@ -39,7 +39,7 @@ test('simple package.json', async t => {
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: dir} = tmp();
+  const {path: dir} = await tmp.dir();
   await fs.writeFile(`${dir}/package.json`, JSON.stringify({
     dependencies: {
       a: '^1.0.0'
@@ -91,7 +91,7 @@ test('simple package.json, production === true', async t => {
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: dir} = tmp();
+  const {path: dir} = await tmp.dir();
   await fs.writeFile(`${dir}/package.json`, JSON.stringify({
     dependencies: {
       a: '^1.0.0',
@@ -144,7 +144,7 @@ test('dir defaults to cwd()', async t => {
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: _dir} = tmp();
+  const {path: _dir} = await tmp.dir();
   const dir = await fs.realpath(_dir);
   await fs.writeFile(`${dir}/package.json`, JSON.stringify({
     dependencies: {

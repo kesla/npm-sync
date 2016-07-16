@@ -2,7 +2,7 @@ import {join} from 'path';
 
 import test from 'tapava';
 import fs from 'then-fs';
-import {dirSync as tmp} from 'tmp';
+import tmp from 'then-tmp';
 import sortBy from 'lodash.sortby';
 import mkdirp from 'mkdirp-then';
 
@@ -29,7 +29,7 @@ test('dirToIdealTree() already existing packages, one good & one needs updating'
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: dir} = tmp();
+  const {path: dir} = await tmp.dir();
   await mkdirp(join(dir, 'node_modules/b/node_modules/c'));
 
   await fs.writeFile(join(dir, 'node_modules/b/package.json'), JSON.stringify({
@@ -66,7 +66,7 @@ test('dirToIdealTree() with package that should be removed', async t => {
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: dir} = tmp();
+  const {path: dir} = await tmp.dir();
   await mkdirp(join(dir, 'node_modules/b/node_modules/c'));
   await fs.writeFile(join(dir, 'package.json'), JSON.stringify({
     dependencies: {
@@ -110,7 +110,7 @@ test('dirToIdealTree() with nested package that should be removed', async t => {
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: dir} = tmp();
+  const {path: dir} = await tmp.dir();
   await mkdirp(join(dir, 'node_modules/a/node_modules/c'));
   await fs.writeFile(join(dir, 'package.json'), JSON.stringify({
     dependencies: {
@@ -151,7 +151,7 @@ test('dirToIdealTree() with multiple nested package where one should be removed'
     await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
   };
 
-  const {name: dir} = tmp();
+  const {path: dir} = await tmp.dir();
   await mkdirp(join(dir, 'node_modules/a/node_modules/b'));
   await mkdirp(join(dir, 'node_modules/a/node_modules/c'));
   await fs.writeFile(join(dir, 'package.json'), JSON.stringify({

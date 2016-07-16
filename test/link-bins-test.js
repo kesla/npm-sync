@@ -1,12 +1,12 @@
 import test from 'tapava';
 import fs from 'then-fs';
-import {dirSync as tmp} from 'tmp';
+import tmp from 'then-tmp';
 import mkdirp from 'mkdirp-then';
 
 import linkBins from '../lib/link-bins';
 
 test('linkBins()', function * (t) {
-  const {name: _dir} = tmp();
+  const {path: _dir} = yield tmp.dir();
   const dir = yield fs.realpath(_dir);
   yield mkdirp(`${dir}/package1`);
   yield mkdirp(`${dir}/package2/bin`);
@@ -48,7 +48,7 @@ test('linkBins()', function * (t) {
 });
 
 test('linkBins(), bin === String', function * (t) {
-  const {name: _dir} = tmp();
+  const {path: _dir} = yield tmp.dir();
   const dir = yield fs.realpath(_dir);
   yield mkdirp(`${dir}/package/bin`);
 

@@ -33,7 +33,7 @@
     "lodash.sortby": "^4.5.0",
     "tapava": "^2.2.0",
     "then-fs": "^2.0.0",
-    "tmp": "0.0.28",
+    "then-tmp": "^1.0.0",
     "xo": "^0.16.0"
   },
   "dependencies": {
