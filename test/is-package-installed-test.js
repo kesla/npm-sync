@@ -41,20 +41,45 @@ test('isPackageInstalled() correct version', async t => {
   const actual = await isPackageInstalled({
     dir, packageName, version
   });
-  t.true(actual, 'package is not installed');
+  t.true(actual, 'package is installed');
 });
 
 test('isPackageInstalled() missing bundleDependencies', async t => {
   const packageName = 'packageName';
   const version = '1.2.1';
-  const dir = await makeTestFiles('wrong-version', {
+  const dir = await makeTestFiles('missing-bundle', {
     'package.json': JSON.stringify({
       name: packageName,
-      version
+      version,
+      bundleDependencies: ['packageName2']
     }, null, 2)
   });
   const actual = await isPackageInstalled({
     dir, packageName, version
   });
   t.false(actual, 'package is not installed');
+});
+
+test('isPackageInstalled() with bundleDependencies', async t => {
+  const packageName = 'packageName';
+  const version = '1.2.1';
+  const dir = await makeTestFiles('missing-bundle', {
+    'package.json': JSON.stringify({
+      name: packageName,
+      version,
+      bundleDependencies: ['packageName2']
+    }, null, 2),
+    'node_modules': {
+      packageName2: {
+        'package.json': JSON.stringify({
+          name: 'package2',
+          version: '1.0.0'
+        }, null, 2)
+      }
+    }
+  });
+  const actual = await isPackageInstalled({
+    dir, packageName, version
+  });
+  t.true(actual, 'package is not installed');
 });
