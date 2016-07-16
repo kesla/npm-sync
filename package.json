@@ -49,8 +49,7 @@
     "minimist": "^1.2.0",
     "mkdirp-then": "^1.2.0",
     "object.entries": "^1.0.3",
-    "rimraf-then": "^1.0.0",
-    "then-read-json": "github:kesla/then-read-json"
+    "rimraf-then": "^1.0.0"
   },
   "xo": {
     "esnext": true,

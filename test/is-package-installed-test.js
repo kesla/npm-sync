@@ -83,3 +83,27 @@ test('isPackageInstalled() with bundleDependencies', async t => {
   });
   t.true(actual, 'package is not installed');
 });
+
+test('isPackageInstalled() with bundledDependencies', async t => {
+  const packageName = 'packageName';
+  const version = '1.2.1';
+  const dir = await makeTestFiles('missing-bundled', {
+    'package.json': JSON.stringify({
+      name: packageName,
+      version,
+      bundledDependencies: ['packageName2']
+    }, null, 2),
+    'node_modules': {
+      packageName2: {
+        'package.json': JSON.stringify({
+          name: 'package2',
+          version: '1.0.0'
+        }, null, 2)
+      }
+    }
+  });
+  const actual = await isPackageInstalled({
+    dir, packageName, version
+  });
+  t.true(actual, 'package is not installed');
+});
