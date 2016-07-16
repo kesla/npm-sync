@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "description": "syncs a node_modules folder with an ideal npm package tree",
   "main": "dist/index.js",
-  "bin": {
-    "npm-sync": "dist/cli.js"
-  },
+  "bin": "bin/cli.js",
   "scripts": {
     "test": "xo && nyc babel-tape-runner test/*-test.js",
     "build": "rm -rf dist && mkdir -p dist && babel lib --out-dir dist",
