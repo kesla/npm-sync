@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "download-github-package": "^1.0.0",
-    "download-npm-package": "^3.1.0",
+    "download-npm-package": "^3.1.8",
     "fs-symlink": "^1.2.1",
     "get-ideal-package-tree": "^2.0.0",
     "get-pkg-json": "^1.0.0",
