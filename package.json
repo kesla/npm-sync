@@ -31,6 +31,7 @@
     "babel-tape-runner": "^2.0.1",
     "babel-watch": "^2.0.2",
     "lodash.sortby": "^4.5.0",
+    "nyc": "^7.0.0",
     "tapava": "^2.2.0",
     "then-fs": "^2.0.0",
     "then-tmp": "^1.0.0",
