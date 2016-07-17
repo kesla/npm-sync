@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable camelcase */
 
 import {join} from 'path';
@@ -35,7 +36,11 @@ test('dirToIdealTree() already existing packages, one good & one needs updating'
   };
 
   const dir = await makeTestFiles({
-    node_modules: {
+    'package.json': JSON.stringify({
+      name: 'irrelevant',
+      version: '999'
+    }),
+    'node_modules': {
       b: {
         'node_modules': {
           c: {
@@ -135,7 +140,8 @@ test('dirToIdealTree() with nested package that should be removed', async t => {
   const dir = await makeTestFiles({
     'node_modules': {
       a: {
-        node_modules: {
+        'package.json': JSON.stringify({}),
+        'node_modules': {
           c: {
             'package.json': JSON.stringify({
               name: 'c',
@@ -183,63 +189,8 @@ test('dirToIdealTree() with multiple nested package where one should be removed'
   const dir = await makeTestFiles({
     'node_modules': {
       a: {
-        node_modules: {
-          b: {
-            'package.json': JSON.stringify({
-              name: 'b',
-              version: '3.0.0'
-            })
-          },
-          c: {
-            'package.json': JSON.stringify({
-              name: 'c',
-              version: '3.0.0'
-            })
-          }
-        }
-      }
-    },
-    'package.json': JSON.stringify({
-      dependencies: {
-        a: '1.0.0', dependencies: {
-          b: '3.0.0'
-        }
-      }
-    })
-  });
-
-  await setupDirToIdealTree(downloadPackage)({dir, tree: idealTree});
-  const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
-  const expectedDownloadArguments = [
-    {arg: 'a@1.0.0', dir: `${dir}/node_modules`}
-  ];
-  t.deepEqual(actualDownloadArguments, expectedDownloadArguments);
-  const actualFiles = await fs.readdir(`${dir}/node_modules/a/node_modules`);
-  const expectedFiles = ['b'];
-  t.deepEqual(actualFiles, expectedFiles);
-});
-
-test('dirToIdealTree() with multiple nested package where one should be removed', async t => {
-  const idealTree = {
-    a: {
-      version: '1.0.0', dependencies: {
-        b: {version: '3.0.0'}
-      }
-    }
-  };
-
-  const _actualDownloadArguments = [];
-  const downloadPackage = async ({arg, dir}) => {
-    const [packageName] = arg.split('@');
-    _actualDownloadArguments.push({arg, dir});
-    await mkdirp(join(dir, packageName));
-    await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
-  };
-
-  const dir = await makeTestFiles({
-    'node_modules': {
-      a: {
-        node_modules: {
+        'package.json': JSON.stringify({}),
+        'node_modules': {
           b: {
             'package.json': JSON.stringify({
               name: 'b',
@@ -267,6 +218,55 @@ test('dirToIdealTree() with multiple nested package where one should be removed'
   const expectedDownloadArguments = [
     {arg: 'a@1.0.0', dir: `${dir}/node_modules`}
   ];
+  t.deepEqual(actualDownloadArguments, expectedDownloadArguments);
+  const actualFiles = await fs.readdir(`${dir}/node_modules/a/node_modules`);
+  const expectedFiles = ['b'];
+  t.deepEqual(actualFiles, expectedFiles);
+});
+
+test('dirToIdealTree() with bundleDependencies', async t => {
+  const idealTree = {
+    a: {
+      version: '1.0.0'
+    }
+  };
+
+  const _actualDownloadArguments = [];
+  const downloadPackage = async ({arg, dir}) => {
+    const [packageName] = arg.split('@');
+    _actualDownloadArguments.push({arg, dir});
+    await mkdirp(join(dir, packageName));
+    await fs.writeFile(join(dir, packageName, 'package.json'), '{}');
+  };
+
+  const dir = await makeTestFiles({
+    'node_modules': {
+      a: {
+        'package.json': JSON.stringify({
+          name: 'a',
+          version: '1.0.0',
+          bundleDependencies: ['b']
+        }),
+        'node_modules': {
+          b: {
+            'package.json': JSON.stringify({
+              name: 'b',
+              version: '3.0.0'
+            })
+          }
+        }
+      }
+    },
+    'package.json': JSON.stringify({
+      dependencies: {
+        a: '1.0.0'
+      }
+    })
+  });
+
+  await setupDirToIdealTree(downloadPackage)({dir, tree: idealTree});
+  const actualDownloadArguments = sortBy(_actualDownloadArguments, 'arg');
+  const expectedDownloadArguments = [];
   t.deepEqual(actualDownloadArguments, expectedDownloadArguments);
   const actualFiles = await fs.readdir(`${dir}/node_modules/a/node_modules`);
   const expectedFiles = ['b'];
