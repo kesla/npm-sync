@@ -1,10 +1,8 @@
 import test from 'tapava';
-import {makeTemp as _makeTestFiles} from 'mkfiletree';
-import promisify from 'promisify-function';
 
 import isPackageInstalled from '../lib/is-package-installed';
 
-const makeTestFiles = promisify(_makeTestFiles);
+import makeTestFiles from './utils/make-test-files';
 
 test('isPackageInstalled() dir does not exist', async t => {
   const actual = await isPackageInstalled({
@@ -17,7 +15,7 @@ test('isPackageInstalled() dir does not exist', async t => {
 
 test('isPackageInstalled() wrong version', async t => {
   const packageName = 'packageName';
-  const dir = await makeTestFiles('wrong-version', {
+  const dir = await makeTestFiles({
     'package.json': JSON.stringify({
       name: packageName,
       version: '1.2.1'
@@ -32,7 +30,7 @@ test('isPackageInstalled() wrong version', async t => {
 test('isPackageInstalled() correct version', async t => {
   const packageName = 'packageName';
   const version = '1.2.1';
-  const dir = await makeTestFiles('correct-version', {
+  const dir = await makeTestFiles({
     'package.json': JSON.stringify({
       name: packageName,
       version
@@ -47,7 +45,7 @@ test('isPackageInstalled() correct version', async t => {
 test('isPackageInstalled() missing bundleDependencies', async t => {
   const packageName = 'packageName';
   const version = '1.2.1';
-  const dir = await makeTestFiles('missing-bundle', {
+  const dir = await makeTestFiles({
     'package.json': JSON.stringify({
       name: packageName,
       version,
@@ -63,7 +61,7 @@ test('isPackageInstalled() missing bundleDependencies', async t => {
 test('isPackageInstalled() with bundleDependencies', async t => {
   const packageName = 'packageName';
   const version = '1.2.1';
-  const dir = await makeTestFiles('missing-bundle', {
+  const dir = await makeTestFiles({
     'package.json': JSON.stringify({
       name: packageName,
       version,
@@ -87,7 +85,7 @@ test('isPackageInstalled() with bundleDependencies', async t => {
 test('isPackageInstalled() with bundledDependencies', async t => {
   const packageName = 'packageName';
   const version = '1.2.1';
-  const dir = await makeTestFiles('missing-bundled', {
+  const dir = await makeTestFiles({
     'package.json': JSON.stringify({
       name: packageName,
       version,
