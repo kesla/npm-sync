@@ -1,5 +1,5 @@
 import test from 'tapava';
-import fs from 'then-fs';
+import fs from 'mz/fs';
 import tmp from 'then-tmp';
 import mkdirp from 'mkdirp-then';
 
