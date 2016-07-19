@@ -1,69 +1,72 @@
+/* eslint-disable camelcase */
+
 import test from 'tapava';
 import fs from 'mz/fs';
 import tmp from 'then-tmp';
 import mkdirp from 'mkdirp-then';
 
 import linkBins from '../lib/link-bins';
+import makeTestFiles from './utils/make-test-files';
 
 test('linkBins()', async t => {
-  const {path: _dir} = await tmp.dir();
-  const dir = await fs.realpath(_dir);
-  await mkdirp(`${dir}/package1`);
-  await mkdirp(`${dir}/package2/bin`);
-  await mkdirp(`${dir}/package3`);
-
-  await fs.writeFile(`${dir}/package1/package.json`, JSON.stringify({}));
-  await fs.writeFile(`${dir}/package2/package.json`, JSON.stringify({
-    bin: {
-      foo: 'bin/foo.js',
-      bar: 'bin/bar.js'
+  const dir = await makeTestFiles({
+    node_modules: {
+      package1: {
+        'package.json': JSON.stringify({})
+      },
+      package2: {
+        'package.json': JSON.stringify({
+          bin: {
+            foo: 'bin/foo.js',
+            bar: 'bin/bar.js'
+          }
+        }),
+        'bin': {
+          'bar.js': '',
+          'foo.js': ''
+        }
+      },
+      package3: {
+        'package.json': JSON.stringify({
+          bin: {
+            beep: 'bin/beep.js'
+          }
+        }),
+        'bin': {
+          'beep.js': ''
+        }
+      }
     }
-  }));
-  await fs.writeFile(`${dir}/package2/bin/foo.js`, '');
-  await fs.writeFile(`${dir}/package2/bin/bar.js`, '');
-  await fs.writeFile(`${dir}/package3/package.json`, JSON.stringify({
-    bin: {
-      beep: 'bin/boop.js'
-    }
-  }));
-  await linkBins({
-    packageNames: ['package1', 'package2'],
-    dir
   });
-  const fooStat = await fs.lstat(`${dir}/.bin/foo`);
-  const barStat = await fs.lstat(`${dir}/.bin/bar`);
+
+  await linkBins({dir});
+  const fooStat = await fs.lstat(`${dir}/node_modules/.bin/foo`);
+  const barStat = await fs.lstat(`${dir}/node_modules/.bin/bar`);
+  const beepStat = await fs.lstat(`${dir}/node_modules/.bin/beep`);
 
   t.true(fooStat.isSymbolicLink());
   t.true(barStat.isSymbolicLink());
+  t.true(beepStat.isSymbolicLink());
 
-  t.is(await fs.realpath(`${dir}/.bin/foo`), `${dir}/package2/bin/foo.js`);
-  t.is(await fs.realpath(`${dir}/.bin/bar`), `${dir}/package2/bin/bar.js`);
-
-  try {
-    await fs.stat(`${dir}/.bin/beep`);
-    t.fail('.bin/beep should not exists');
-  } catch (err) {
-    t.is(err.code, 'ENOENT', 'no bin for beep');
-  }
+  t.is(await fs.realpath(`${dir}/node_modules/.bin/foo`), `${dir}/node_modules/package2/bin/foo.js`);
+  t.is(await fs.realpath(`${dir}/node_modules/.bin/bar`), `${dir}/node_modules/package2/bin/bar.js`);
+  t.is(await fs.realpath(`${dir}/node_modules/.bin/beep`), `${dir}/node_modules/package3/bin/beep.js`);
 });
 
 test('linkBins(), bin === String', async t => {
   const {path: _dir} = await tmp.dir();
   const dir = await fs.realpath(_dir);
-  await mkdirp(`${dir}/package/bin`);
+  await mkdirp(`${dir}/node_modules/package/bin`);
 
-  await fs.writeFile(`${dir}/package/package.json`, JSON.stringify({
+  await fs.writeFile(`${dir}/node_modules/package/package.json`, JSON.stringify({
     bin: 'bin/foo.js',
     name: 'package'
   }));
-  await fs.writeFile(`${dir}/package/bin/foo.js`, '');
-  await linkBins({
-    packageNames: ['package'],
-    dir
-  });
-  const fooStat = await fs.lstat(`${dir}/.bin/package`);
+  await fs.writeFile(`${dir}/node_modules/package/bin/foo.js`, '');
+  await linkBins({dir});
+  const fooStat = await fs.lstat(`${dir}/node_modules/.bin/package`);
 
   t.true(fooStat.isSymbolicLink());
 
-  t.is(await fs.realpath(`${dir}/.bin/package`), `${dir}/package/bin/foo.js`);
+  t.is(await fs.realpath(`${dir}/node_modules/.bin/package`), `${dir}/node_modules/package/bin/foo.js`);
 });
