@@ -272,3 +272,22 @@ test('dirToIdealTree() with bundleDependencies', async t => {
   const expectedFiles = ['b'];
   t.deepEqual(actualFiles, expectedFiles);
 });
+
+test('dirToIdealTree() with wrong name (could happen w github arg)', async t => {
+  const dir = await makeTestFiles({
+    'package.json': '{}'
+  });
+  const downloadPackage = async ({arg, dir}) => {
+    t.is(arg, 'package-name@github:user/wrong-package-name');
+    const wrongPackageName = 'wrong-package-name';
+    await mkdirp(join(dir, wrongPackageName));
+    await fs.writeFile(join(dir, wrongPackageName, 'package.json'), '{}');
+  };
+  const idealTree = {
+    'package-name': {
+      version: 'github:user/wrong-package-name'
+    }
+  };
+
+  await t.throws(setupDirToIdealTree(downloadPackage)({dir, tree: idealTree}));
+});
