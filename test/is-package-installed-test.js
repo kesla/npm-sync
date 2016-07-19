@@ -1,6 +1,6 @@
 import test from 'tapava';
 
-import isPackageInstalled from '../lib/is-package-installed';
+import isPackageInstalled from '../lib/dir-to-ideal-tree/is-package-installed';
 
 import makeTestFiles from './utils/make-test-files';
 
