@@ -46,7 +46,7 @@
     "fs-symlink": "^1.2.1",
     "get-ideal-package-tree": "^2.0.0",
     "get-pkg-json": "^1.0.0",
-    "graceful-fs": "^4.1.4",
+    "graceful-fs": "^4.1.7",
     "immutable-object-methods": "^1.2.1",
     "minimist": "^1.2.0",
     "mkdirp-then": "^1.2.0",
